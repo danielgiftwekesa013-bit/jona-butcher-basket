@@ -47,6 +47,10 @@ export const supplyApplicationSchema = z.object({
   message: z.string().trim().max(1200, "Keep your message under 1,200 characters."),
 });
 
+export const supplyApplicationSubmissionSchema = supplyApplicationSchema.extend({
+  submissionKey: z.string().uuid("This request needs a valid submission key."),
+});
+
 export type SupplyApplicationInput = z.infer<typeof supplyApplicationSchema>;
 
 export function formatSupplyApplicationMessage(application: SupplyApplicationInput) {
