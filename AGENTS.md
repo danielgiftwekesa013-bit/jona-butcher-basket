@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application design decisions
+- Public enquiry forms submit through server-side validated handlers and insert-only database policies so private customer details are never publicly readable.
