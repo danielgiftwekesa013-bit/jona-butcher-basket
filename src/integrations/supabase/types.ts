@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      supply_applications: {
+        Row: {
+          business_name: string
+          contact_name: string
+          delivery_location: string
+          email: string | null
+          estimated_quantity: string | null
+          id: string
+          message: string | null
+          organization_type: string
+          phone: string
+          status: string
+          submission_key: string
+          submitted_at: string
+          supply_frequency: string
+          supply_type: string
+        }
+        Insert: {
+          business_name: string
+          contact_name: string
+          delivery_location: string
+          email?: string | null
+          estimated_quantity?: string | null
+          id?: string
+          message?: string | null
+          organization_type: string
+          phone: string
+          status?: string
+          submission_key: string
+          submitted_at?: string
+          supply_frequency: string
+          supply_type: string
+        }
+        Update: {
+          business_name?: string
+          contact_name?: string
+          delivery_location?: string
+          email?: string | null
+          estimated_quantity?: string | null
+          id?: string
+          message?: string | null
+          organization_type?: string
+          phone?: string
+          status?: string
+          submission_key?: string
+          submitted_at?: string
+          supply_frequency?: string
+          supply_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
