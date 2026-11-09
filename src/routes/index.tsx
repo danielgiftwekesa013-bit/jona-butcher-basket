@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowDown,
   ArrowRight,
@@ -34,7 +33,6 @@ import {
   supplyTypes,
   type SupplyApplicationInput,
 } from "@/lib/supply-application-schema";
-import { submitSupplyApplication } from "@/lib/supply-applications.functions";
 import heroPhoto from "@/assets/jona-hero.jpg";
 import cutsPhoto from "@/assets/jona-fresh-cuts.jpg";
 import grillPhoto from "@/assets/jona-grill.jpg";
@@ -478,24 +476,22 @@ function JonaHomePage() {
 }
 
 function SupplyApplicationForm() {
-  const submitApplication = useServerFn(submitSupplyApplication);
   const [values, setValues] = useState<SupplyApplicationInput>(initialApplication);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState("");
   const [whatsAppUrl, setWhatsAppUrl] = useState("");
+  const [whatsAppOpened, setWhatsAppOpened] = useState(false);
 
   function changeField(field: keyof SupplyApplicationInput, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
     if (errors[field]) setErrors((current) => ({ ...current, [field]: "" }));
     if (formError) setFormError("");
     setWhatsAppUrl("");
+    setWhatsAppOpened(false);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (submitting || submitted) return;
 
     const validation = supplyApplicationSchema.safeParse(values);
     if (!validation.success) {
@@ -512,31 +508,13 @@ function SupplyApplicationForm() {
 
     setErrors({});
     setFormError("");
-    setSubmitting(true);
-    const whatsAppMessage = formatSupplyApplicationMessage(validation.data);
-    setWhatsAppUrl(buildWhatsAppUrl(whatsAppMessage));
-    try {
-      await submitApplication({ data: { ...validation.data, submissionKey: crypto.randomUUID() } });
-      setSubmitted(true);
-    } catch {
-      setFormError("We couldn’t send your application just now. Your details are ready to send securely on WhatsApp.");
-    } finally {
-      setSubmitting(false);
+    const url = buildWhatsAppUrl(formatSupplyApplicationMessage(validation.data));
+    setWhatsAppUrl(url);
+    const whatsappWindow = window.open(url, "_blank", "noopener,noreferrer");
+    setWhatsAppOpened(Boolean(whatsappWindow));
+    if (!whatsappWindow) {
+      setFormError("WhatsApp didn’t open automatically. Use the link below to continue.");
     }
-  }
-
-  if (submitted) {
-    return (
-      <div className="supply-form supply-success" role="status" aria-live="polite">
-        <div className="success-symbol"><CheckCircle2 aria-hidden="true" /></div>
-        <p className="form-eyebrow">APPLICATION RECEIVED</p>
-        <h3>Thanks for getting in touch.</h3>
-        <p>Your supply application is with the Jona team. We’ll follow up to discuss your requirements.</p>
-        <Button type="button" variant="outline" onClick={() => { setSubmitted(false); setValues(initialApplication); }}>
-          Send another application
-        </Button>
-      </div>
-    );
   }
 
   return (
@@ -588,16 +566,19 @@ function SupplyApplicationForm() {
       </div>
 
       <div className="form-submit-row">
-        <Button type="submit" size="lg" className="submit-button" disabled={submitting}>
-          {submitting ? <><span className="loading-indicator" aria-hidden="true" /> Sending your application…</> : <>Submit supply application <ArrowRight aria-hidden="true" /></>}
+        <Button type="submit" size="lg" className="submit-button">
+          <MessageCircle aria-hidden="true" /> Send request on WhatsApp
         </Button>
-        <span className="form-privacy">Your details are only shared with the Jona team.</span>
+        <span className="form-privacy">Your details are placed in a WhatsApp message to Jona. Press Send in WhatsApp to submit.</span>
       </div>
 
-      {whatsAppUrl && !submitted && !submitting && (
-        <a className="whatsapp-fallback" href={whatsAppUrl} target="_blank" rel="noreferrer">
-          <MessageCircle aria-hidden="true" /> Send the prepared application on WhatsApp <ArrowUpRight aria-hidden="true" />
-        </a>
+      {whatsAppUrl && (
+        <div className="whatsapp-fallback" role="status" aria-live="polite">
+          {whatsAppOpened && <span>WhatsApp opened with your application details. Review and press Send to submit.</span>}
+          <a href={whatsAppUrl} target="_blank" rel="noreferrer">
+            <MessageCircle aria-hidden="true" /> Open WhatsApp with your application <ArrowUpRight aria-hidden="true" />
+          </a>
+        </div>
       )}
     </form>
   );
