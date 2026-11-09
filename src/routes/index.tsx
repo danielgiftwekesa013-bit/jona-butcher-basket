@@ -478,18 +478,19 @@ function JonaHomePage() {
 function SupplyApplicationForm() {
   const [values, setValues] = useState<SupplyApplicationInput>(initialApplication);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
 
   function changeField(field: keyof SupplyApplicationInput, value: string) {
+  const [whatsAppOpened, setWhatsAppOpened] = useState(false);
     setValues((current) => ({ ...current, [field]: value }));
     if (errors[field]) setErrors((current) => ({ ...current, [field]: "" }));
     if (formError) setFormError("");
+    setWhatsAppUrl("");
+    setWhatsAppOpened(false);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (submitting) return;
 
     const validation = supplyApplicationSchema.safeParse(values);
     if (!validation.success) {
@@ -506,11 +507,13 @@ function SupplyApplicationForm() {
 
     setErrors({});
     setFormError("");
-    setSubmitting(true);
-    const whatsAppMessage = formatSupplyApplicationMessage(validation.data);
-    const whatsAppUrl = buildWhatsAppUrl(whatsAppMessage);
-    window.open(whatsAppUrl, "_blank", "noopener,noreferrer");
-    setSubmitting(false);
+    const url = buildWhatsAppUrl(formatSupplyApplicationMessage(validation.data));
+    setWhatsAppUrl(url);
+    const whatsappWindow = window.open(url, "_blank", "noopener,noreferrer");
+    setWhatsAppOpened(Boolean(whatsappWindow));
+    if (!whatsappWindow) {
+      setFormError("WhatsApp didn’t open automatically. Use the link below to continue.");
+    }
   }
 
   return (
@@ -563,10 +566,19 @@ function SupplyApplicationForm() {
 
       <div className="form-submit-row">
         <Button type="submit" size="lg" className="submit-button" disabled={submitting}>
-          {submitting ? <><span className="loading-indicator" aria-hidden="true" /> Opening WhatsApp…</> : <><MessageCircle aria-hidden="true" /> Continue to WhatsApp</>}
+          <><MessageCircle aria-hidden="true" /> Send request on WhatsApp</>
         </Button>
-        <span className="form-privacy">Your application details will be included in a WhatsApp message to Jona.</span>
+        <span className="form-privacy">Your details are placed in a WhatsApp message to Jona for you to review and send.</span>
       </div>
+
+      {whatsAppUrl && (
+        <div className="whatsapp-fallback" role="status" aria-live="polite">
+          {whatsAppOpened && <span>WhatsApp opened with your application details. Review and send the message there.</span>}
+          <a href={whatsAppUrl} target="_blank" rel="noreferrer">
+            <MessageCircle aria-hidden="true" /> Open WhatsApp with your application <ArrowUpRight aria-hidden="true" />
+          </a>
+        </div>
+      )}
     </form>
   );
 }
