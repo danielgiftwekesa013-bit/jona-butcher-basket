@@ -1,4 +1,5 @@
-import { createFileRoute, useServerFn } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowDown,
   ArrowRight,
@@ -548,41 +549,41 @@ function SupplyApplicationForm() {
       {formError && <p className="form-error-banner" role="alert">{formError}</p>}
 
       <div className="form-grid">
-        <SupplyField id="supply-business-name" label="Business / institution name" error={errors.businessName} required>
-          <Input id="supply-business-name" name="businessName" autoComplete="organization" maxLength={160} value={values.businessName} onChange={(event) => changeField("businessName", event.target.value)} aria-invalid={Boolean(errors.businessName)} aria-describedby={errors.businessName ? "error-businessName" : undefined} />
+        <SupplyField id="supply-business-name" label="Business / institution name" error={errors["businessName"]} required>
+          <Input id="supply-business-name" name="businessName" autoComplete="organization" maxLength={160} value={values.businessName} onChange={(event) => changeField("businessName", event.target.value)} aria-invalid={Boolean(errors["businessName"])} aria-describedby={errors["businessName"] ? "error-businessName" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-contact-name" label="Contact person’s full name" error={errors.contactName} required>
-          <Input id="supply-contact-name" name="contactName" autoComplete="name" maxLength={120} value={values.contactName} onChange={(event) => changeField("contactName", event.target.value)} aria-invalid={Boolean(errors.contactName)} aria-describedby={errors.contactName ? "error-contactName" : undefined} />
+        <SupplyField id="supply-contact-name" label="Contact person’s full name" error={errors["contactName"]} required>
+          <Input id="supply-contact-name" name="contactName" autoComplete="name" maxLength={120} value={values.contactName} onChange={(event) => changeField("contactName", event.target.value)} aria-invalid={Boolean(errors["contactName"])} aria-describedby={errors["contactName"] ? "error-contactName" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-phone" label="Phone number" error={errors.phone} required>
-          <Input id="supply-phone" name="phone" type="tel" autoComplete="tel" maxLength={30} placeholder="e.g. 0705 518001" value={values.phone} onChange={(event) => changeField("phone", event.target.value)} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? "error-phone" : undefined} />
+        <SupplyField id="supply-phone" label="Phone number" error={errors["phone"]} required>
+          <Input id="supply-phone" name="phone" type="tel" autoComplete="tel" maxLength={30} placeholder="e.g. 0705 518001" value={values.phone} onChange={(event) => changeField("phone", event.target.value)} aria-invalid={Boolean(errors["phone"])} aria-describedby={errors["phone"] ? "error-phone" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-email" label="Email address" error={errors.email} optional>
-          <Input id="supply-email" name="email" type="email" autoComplete="email" maxLength={255} placeholder="Optional" value={values.email} onChange={(event) => changeField("email", event.target.value)} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "error-email" : undefined} />
+        <SupplyField id="supply-email" label="Email address" error={errors["email"]} optional>
+          <Input id="supply-email" name="email" type="email" autoComplete="email" maxLength={255} placeholder="Optional" value={values.email} onChange={(event) => changeField("email", event.target.value)} aria-invalid={Boolean(errors["email"])} aria-describedby={errors["email"] ? "error-email" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-organization" label="Type of organisation" error={errors.organizationType} required>
-          <select id="supply-organization" name="organizationType" value={values.organizationType} onChange={(event) => changeField("organizationType", event.target.value)} aria-invalid={Boolean(errors.organizationType)} aria-describedby={errors.organizationType ? "error-organizationType" : undefined}>
+        <SupplyField id="supply-organization" label="Type of organisation" error={errors["organizationType"]} required>
+          <select id="supply-organization" name="organizationType" value={values.organizationType} onChange={(event) => changeField("organizationType", event.target.value)} aria-invalid={Boolean(errors["organizationType"])} aria-describedby={errors["organizationType"] ? "error-organizationType" : undefined}>
             {organizationTypes.map((type) => <option key={type} value={type}>{type}</option>)}
           </select>
         </SupplyField>
-        <SupplyField id="supply-type" label="Supply required" error={errors.supplyType} required>
-          <select id="supply-type" name="supplyType" value={values.supplyType} onChange={(event) => changeField("supplyType", event.target.value)} aria-invalid={Boolean(errors.supplyType)} aria-describedby={errors.supplyType ? "error-supplyType" : undefined}>
+        <SupplyField id="supply-type" label="Supply required" error={errors["supplyType"]} required>
+          <select id="supply-type" name="supplyType" value={values.supplyType} onChange={(event) => changeField("supplyType", event.target.value)} aria-invalid={Boolean(errors["supplyType"])} aria-describedby={errors["supplyType"] ? "error-supplyType" : undefined}>
             {supplyTypes.map((type) => <option key={type} value={type}>{type}</option>)}
           </select>
         </SupplyField>
-        <SupplyField id="supply-quantity" label="Estimated quantity" error={errors.estimatedQuantity} optional>
-          <Input id="supply-quantity" name="estimatedQuantity" maxLength={120} placeholder="e.g. 40 kg" value={values.estimatedQuantity} onChange={(event) => changeField("estimatedQuantity", event.target.value)} aria-invalid={Boolean(errors.estimatedQuantity)} aria-describedby={errors.estimatedQuantity ? "error-estimatedQuantity" : undefined} />
+        <SupplyField id="supply-quantity" label="Estimated quantity" error={errors["estimatedQuantity"]} optional>
+          <Input id="supply-quantity" name="estimatedQuantity" maxLength={120} placeholder="e.g. 40 kg" value={values.estimatedQuantity} onChange={(event) => changeField("estimatedQuantity", event.target.value)} aria-invalid={Boolean(errors["estimatedQuantity"])} aria-describedby={errors["estimatedQuantity"] ? "error-estimatedQuantity" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-frequency" label="Supply frequency" error={errors.supplyFrequency} required>
-          <select id="supply-frequency" name="supplyFrequency" value={values.supplyFrequency} onChange={(event) => changeField("supplyFrequency", event.target.value)} aria-invalid={Boolean(errors.supplyFrequency)} aria-describedby={errors.supplyFrequency ? "error-supplyFrequency" : undefined}>
+        <SupplyField id="supply-frequency" label="Supply frequency" error={errors["supplyFrequency"]} required>
+          <select id="supply-frequency" name="supplyFrequency" value={values.supplyFrequency} onChange={(event) => changeField("supplyFrequency", event.target.value)} aria-invalid={Boolean(errors["supplyFrequency"])} aria-describedby={errors["supplyFrequency"] ? "error-supplyFrequency" : undefined}>
             {supplyFrequencies.map((frequency) => <option key={frequency} value={frequency}>{frequency}</option>)}
           </select>
         </SupplyField>
-        <SupplyField id="supply-location" label="Delivery location" error={errors.deliveryLocation} required fullWidth>
-          <Input id="supply-location" name="deliveryLocation" autoComplete="address-level2" maxLength={240} value={values.deliveryLocation} onChange={(event) => changeField("deliveryLocation", event.target.value)} aria-invalid={Boolean(errors.deliveryLocation)} aria-describedby={errors.deliveryLocation ? "error-deliveryLocation" : undefined} />
+        <SupplyField id="supply-location" label="Delivery location" error={errors["deliveryLocation"]} required fullWidth>
+          <Input id="supply-location" name="deliveryLocation" autoComplete="address-level2" maxLength={240} value={values.deliveryLocation} onChange={(event) => changeField("deliveryLocation", event.target.value)} aria-invalid={Boolean(errors["deliveryLocation"])} aria-describedby={errors["deliveryLocation"] ? "error-deliveryLocation" : undefined} />
         </SupplyField>
-        <SupplyField id="supply-message" label="Additional requirements" error={errors.message} optional fullWidth>
-          <Textarea id="supply-message" name="message" maxLength={1200} rows={3} placeholder="Anything else we should know?" value={values.message} onChange={(event) => changeField("message", event.target.value)} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? "error-message" : undefined} />
+        <SupplyField id="supply-message" label="Additional requirements" error={errors["message"]} optional fullWidth>
+          <Textarea id="supply-message" name="message" maxLength={1200} rows={3} placeholder="Anything else we should know?" value={values.message} onChange={(event) => changeField("message", event.target.value)} aria-invalid={Boolean(errors["message"])} aria-describedby={errors["message"] ? "error-message" : undefined} />
         </SupplyField>
       </div>
 
@@ -613,7 +614,7 @@ function SupplyField({
 }: {
   id: string;
   label: string;
-  error?: string;
+  error?: string | undefined;
   children: React.ReactNode;
   required?: boolean;
   optional?: boolean;
