@@ -479,9 +479,10 @@ function SupplyApplicationForm() {
   const [values, setValues] = useState<SupplyApplicationInput>(initialApplication);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
+  const [whatsAppUrl, setWhatsAppUrl] = useState("");
+  const [whatsAppOpened, setWhatsAppOpened] = useState(false);
 
   function changeField(field: keyof SupplyApplicationInput, value: string) {
-  const [whatsAppOpened, setWhatsAppOpened] = useState(false);
     setValues((current) => ({ ...current, [field]: value }));
     if (errors[field]) setErrors((current) => ({ ...current, [field]: "" }));
     if (formError) setFormError("");
@@ -565,15 +566,15 @@ function SupplyApplicationForm() {
       </div>
 
       <div className="form-submit-row">
-        <Button type="submit" size="lg" className="submit-button" disabled={submitting}>
-          <><MessageCircle aria-hidden="true" /> Send request on WhatsApp</>
+        <Button type="submit" size="lg" className="submit-button">
+          <MessageCircle aria-hidden="true" /> Send request on WhatsApp
         </Button>
-        <span className="form-privacy">Your details are placed in a WhatsApp message to Jona for you to review and send.</span>
+        <span className="form-privacy">Your details are placed in a WhatsApp message to Jona. Press Send in WhatsApp to submit.</span>
       </div>
 
       {whatsAppUrl && (
         <div className="whatsapp-fallback" role="status" aria-live="polite">
-          {whatsAppOpened && <span>WhatsApp opened with your application details. Review and send the message there.</span>}
+          {whatsAppOpened && <span>WhatsApp opened with your application details. Review and press Send to submit.</span>}
           <a href={whatsAppUrl} target="_blank" rel="noreferrer">
             <MessageCircle aria-hidden="true" /> Open WhatsApp with your application <ArrowUpRight aria-hidden="true" />
           </a>
